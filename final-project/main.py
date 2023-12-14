@@ -6,12 +6,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from ucimlrepo import fetch_ucirepo
 
+ref = ["No", "Yes"]
+
 # fetch dataset
+# https://archive.ics.uci.edu/dataset/94/spambase
 spambase = fetch_ucirepo(id=94)
 
 # data (as pandas dataframes)
-x = spambase.data.features
-y = spambase.data.targets
+x = spambase.data.features.values
+y = spambase.data.targets.values
 
 #Standardizes the x values
 scaler = StandardScaler().fit(x)
@@ -31,18 +34,8 @@ print("")
 print(y_test)
 for index in range(len(x_test)):
     x = x_test[index]
-    x = x.reshape(-1, 57) # THIS IS THE PROBLEM
+    x = x.reshape(-1, 57)
     y_pred = model.predict(x)[0]
-
-    if y_pred == 0:
-        y_pred = "1"
-    else:
-        y_pred = "0"
-    
-    actual = y_test[index]
-    if actual == 0:
-        actual = "1"
-    else:
-        actual = "0"
-    print("Predicted Spam: " + y_pred + " Actual Spam: " + actual)
+    actual = y_test[index][0]
+    print("Predicted: " + ref[y_pred] + "; Actual: " + ref[actual]) 
     print("")
